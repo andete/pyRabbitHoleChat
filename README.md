@@ -14,11 +14,14 @@ To edit your default username, server address, or port address, just edit the co
 
 If you do not set a default username, the program will give you the nickname "Rabbithole" with a number between 0 and 5000.
 
-To start this program, open your terminal, go to the directory where the python script and the XML file are located and type:
+To start this program, open your terminal, go to the directory where pyRabbitHoleChat.py, GUI.xml and config file are located and type:
 >python pyRabbitHoleChat.py
 
 If that doesn't work, then you may have Python3 set as your default Python version, so just type:
 >python2 pyRabbitHoleChat.py
+
+To make pyRabbitHoleChat.py an executable file, go to the directory where pyRabbitHoleChat.py is located and type:
+>chmod +x pyRabbitHoleChat.py
 
 
 Special Functions
