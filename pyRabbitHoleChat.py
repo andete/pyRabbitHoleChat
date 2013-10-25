@@ -38,9 +38,9 @@ class pyRabbitHoleChat:
 		if self.username == '':
 			self.username = 'RabbitHole' + str(random.randint(0, 5000))
 		self.builder = gtk.Builder()
-		gtk.Window().set_title ("pyRabbitHoleChat")
 		self.builder.add_from_file('GUI.xml')
 		self.window = self.builder.get_object('window')
+		self.window.set_title ("pyRabbitHoleChat")
 		self.status = self.builder.get_object('status')
 		self.scrolledwindow = self.builder.get_object('scrolledwindow')
 		self.messages = self.builder.get_object('messages')
