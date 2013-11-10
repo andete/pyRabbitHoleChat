@@ -97,8 +97,12 @@ class pyRabbitHoleChat:
 
 	def printOutput(self, output):
 		self.tBox = self.messages.get_buffer()
+		visible = self.messages.get_visible_rect()
+		max_y_pos = visible.y + visible.height
+		last_line_pos = sum(self.messages.get_line_yrange(self.tBox.get_end_iter()), -2)
 		self.tBox.insert(self.tBox.get_end_iter(), str(output) + '\n')
-		self.messages.scroll_to_mark(self.tBox.get_insert(), 0);
+		if last_line_pos < max_y_pos:
+			self.messages.scroll_to_mark(self.tBox.get_insert(), 0);
 
 	def recvData(self):
 		while 1:
