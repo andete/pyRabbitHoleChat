@@ -13,6 +13,9 @@ extra_options = {}
 if sys.platform == 'win32':
   import py2exe
   OPTIONS = {
+      'packages':'encodings',
+      # Optionally omit gio, gtk.keysyms, and/or rsvg if you're not using them
+      'includes': 'cairo, pango, pangocairo, atk, gobject, gio, gtk.keysyms, rsvg',
   }
   extra_data_files = ['msvcp90.dll',]
   extra_options = dict(
@@ -20,6 +23,11 @@ if sys.platform == 'win32':
       console=['pyRabbitHoleChat.py'],
       options=dict(py2exe=OPTIONS)
       )
+  # Find GTK+ installation path
+  __import__('gtk')
+  m = sys.modules['gtk']
+  gtk_base_path = m.__path__[0]
+
 elif sys.platform.startswith('linux'):
   extra_options = dict(
       # Normally unix-like platforms will use "setup.py install"
@@ -29,6 +37,7 @@ elif sys.platform.startswith('linux'):
 
 elif sys.platform == 'darwin':
   raise Exception("TODO OS-X app.")
+
 else:
   raise Exception("unknown platform: " + sys.platform)
 
