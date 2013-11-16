@@ -8,7 +8,9 @@
 '''
 
 import ConfigParser
+import glib
 import gtk
+import os.path
 import pygtk
 import random
 import socket
@@ -21,10 +23,15 @@ pygtk.require('2.0')
 
 class pyRabbitHoleChat:
 
-	def __init__(self):
+	def __init__(self, data_dir):
 		parser = ConfigParser.SafeConfigParser()
-		parser.read('config')
-		self.username = parser.get('login_settings', 'username')
+		try:
+			parser.read('config')
+			self.username = parser.get('login_settings', 'username')
+		except ConfigParser.Error:
+			# fall back to reading default config file from share dir
+			parser.read(os.path.join(data_dir, 'config'))
+			self.username = parser.get('login_settings', 'username')
 		self.address = parser.get('login_settings', 'address')
 		self.port = int(parser.get('login_settings', 'port'))
 		self.users = {}
@@ -38,7 +45,11 @@ class pyRabbitHoleChat:
 		if self.username == '':
 			self.username = 'RabbitHole' + str(random.randint(0, 5000))
 		self.builder = gtk.Builder()
-		self.builder.add_from_file('GUI.xml')
+		try:
+			self.builder.add_from_file(os.path.join(data_dir, 'GUI.xml'))
+		except glib.GError:
+			# fall back to current dir for GUI.xml
+			self.builder.add_from_file('GUI.xml')
 		self.window = self.builder.get_object('window')
 		self.window.set_title ("pyRabbitHoleChat")
 		self.status = self.builder.get_object('status')
@@ -214,6 +225,12 @@ class pyRabbitHoleChat:
 						' is not recognized')
 
 if __name__ == '__main__':
+	# if there is a file called 'Makefile' in the same directory
+	# as this script, we're running from the development tree
+	dirname = os.path.dirname(os.path.abspath(sys.argv[0]))
+	data_dir = os.path.join(sys.prefix, 'share', 'pyRabbitHoleChat')
+	#data_dir = os.path.join('/tmp/bla/usr', 'share', 'pyRabbitHoleChat')
+	#print data_dir
 	gtk.gdk.threads_init()
-	application = pyRabbitHoleChat()
+	application = pyRabbitHoleChat(data_dir)
 	application.main()
